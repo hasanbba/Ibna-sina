@@ -12,6 +12,7 @@ class RemarkForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Name')
                     ->required(),
             ]);
     }
