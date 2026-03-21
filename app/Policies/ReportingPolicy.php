@@ -19,7 +19,7 @@ class ReportingPolicy
 
     public function view(AuthUser $authUser, Reporting $reporting): bool
     {
-        return $authUser->can('View:Reporting') && $this->canAccessReporting($authUser, $reporting);
+        return $authUser->can('View:Reporting');
     }
 
     public function create(AuthUser $authUser): bool
@@ -29,12 +29,12 @@ class ReportingPolicy
 
     public function update(AuthUser $authUser, Reporting $reporting): bool
     {
-        return $authUser->can('Update:Reporting') && $this->canAccessReporting($authUser, $reporting);
+        return $authUser->can('Update:Reporting');
     }
 
     public function delete(AuthUser $authUser, Reporting $reporting): bool
     {
-        return $authUser->can('Delete:Reporting') && $this->canAccessReporting($authUser, $reporting);
+        return $authUser->can('Delete:Reporting');
     }
 
     public function restore(AuthUser $authUser, Reporting $reporting): bool
@@ -59,7 +59,7 @@ class ReportingPolicy
 
     public function replicate(AuthUser $authUser, Reporting $reporting): bool
     {
-        return $authUser->can('Replicate:Reporting') && $this->canAccessReporting($authUser, $reporting);
+        return $authUser->can('Replicate:Reporting');
     }
 
     public function reorder(AuthUser $authUser): bool
@@ -67,16 +67,4 @@ class ReportingPolicy
         return $authUser->can('Reorder:Reporting');
     }
 
-    protected function canAccessReporting(AuthUser $authUser, Reporting $reporting): bool
-    {
-        if (! method_exists($authUser, 'isSuperAdmin') || ! method_exists($authUser, 'assignedConsultantIds')) {
-            return false;
-        }
-
-        if ($authUser->isSuperAdmin()) {
-            return true;
-        }
-
-        return in_array($reporting->consultant_id, $authUser->assignedConsultantIds(), true);
-    }
 }

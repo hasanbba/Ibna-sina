@@ -1,42 +1,38 @@
 <?php
 
-namespace App\Filament\Resources\Reportings;
+namespace App\Filament\Resources\Investigations;
 
-use App\Filament\Resources\Reportings\Pages\CreateReporting;
-use App\Filament\Resources\Reportings\Pages\CreateReportingBulk;
-use App\Filament\Resources\Reportings\Pages\EditReporting;
-use App\Filament\Resources\Reportings\Pages\ListReportings;
-use App\Filament\Resources\Reportings\Pages\ReportingReport;
-use App\Filament\Resources\Reportings\Schemas\ReportingForm;
-use App\Filament\Resources\Reportings\Tables\ReportingsTable;
+use App\Filament\Resources\Investigations\Pages\CreateInvestigation;
+use App\Filament\Resources\Investigations\Pages\CreateInvestigationBulk;
+use App\Filament\Resources\Investigations\Pages\EditInvestigation;
+use App\Filament\Resources\Investigations\Pages\ListInvestigations;
+use App\Filament\Resources\Investigations\Schemas\InvestigationForm;
+use App\Filament\Resources\Investigations\Tables\InvestigationsTable;
 use App\Models\Consultant;
-use App\Models\Reporting;
+use App\Models\Investigation;
 use App\Models\User;
 use BackedEnum;
 use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class ReportingResource extends Resource
+class InvestigationResource extends Resource
 {
-    protected static ?string $model = Reporting::class;
+    protected static ?string $model = Investigation::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $recordTitleAttribute = 'investigation_id';
+
+    protected static string|BackedEnum|null $navigationIcon = 'fas-flask';
+
     protected static string | UnitEnum | null $navigationGroup = 'Consultant Management';
 
-    protected static ?string $recordTitleAttribute = 'Reporting';
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return auth()->check() && auth()->user()->isSuperAdmin();
-    }
+    protected static ?int $navigationSort = 6;
 
     public static function form(Schema $schema): Schema
     {
-        return ReportingForm::configure($schema);
+        return InvestigationForm::configure($schema);
     }
 
     public static function getEloquentQuery(): Builder
@@ -59,7 +55,7 @@ class ReportingResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return ReportingsTable::configure($table);
+        return InvestigationsTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -97,11 +93,10 @@ class ReportingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListReportings::route('/'),
-            'report' => ReportingReport::route('/report'),
-            'create' => CreateReporting::route('/create'),
-            'bulk-create' => CreateReportingBulk::route('/bulk-create'),
-            'edit' => EditReporting::route('/{record}/edit'),
+            'index' => ListInvestigations::route('/'),
+            'create' => CreateInvestigation::route('/create'),
+            'bulk-create' => CreateInvestigationBulk::route('/bulk-create'),
+            'edit' => EditInvestigation::route('/{record}/edit'),
         ];
     }
 }

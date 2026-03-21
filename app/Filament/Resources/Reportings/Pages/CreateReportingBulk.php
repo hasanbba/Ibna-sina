@@ -56,7 +56,8 @@ class CreateReportingBulk extends CreateRecord
                     ->schema([
                         DatePicker::make('date')
                             ->required()
-                            ->default(Carbon::now()->toDateString()),
+                            ->default(Carbon::now()->toDateString())
+                            ->visible(fn (): bool => auth()->user()?->isSuperAdmin() ?? false),
                         Repeater::make('rows')
                             ->label('Consultants')
                             ->addable(false)
@@ -122,7 +123,7 @@ class CreateReportingBulk extends CreateRecord
 
         try {
             $data = $this->form->getState();
-            $date = $data['date'] ?? null;
+            $date = $this->resolveBulkDate($data);
             $rows = collect($data['rows'] ?? [])
                 ->filter(fn (array $row): bool => $this->rowHasInput($row));
 
@@ -216,7 +217,35 @@ class CreateReportingBulk extends CreateRecord
 
     public function getTitle(): string | Htmlable
     {
-        return 'Bulk Create Reporting';
+        return auth()->user()?->isSuperAdmin()
+            ? 'Bulk Create Reporting'
+            : "Today's Reporting";
+    }
+
+    public function getHeading(): string | Htmlable
+    {
+        return auth()->user()?->isSuperAdmin()
+            ? 'Bulk Create Reporting'
+            : "Today's Reporting";
+    }
+
+    public function getSubheading(): string | Htmlable | null
+    {
+        return auth()->user()?->isSuperAdmin()
+            ? 'Choose a date, enter values for the consultants you need, and save them together.'
+            : 'Enter today\'s reporting values for your assigned consultants.';
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    protected function resolveBulkDate(array $data): ?string
+    {
+        if (! (auth()->user()?->isSuperAdmin() ?? false)) {
+            return Carbon::now()->toDateString();
+        }
+
+        return $data['date'] ?? null;
     }
 
     /**

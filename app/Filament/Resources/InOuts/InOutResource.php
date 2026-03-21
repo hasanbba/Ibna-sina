@@ -1,33 +1,36 @@
 <?php
 
-namespace App\Filament\Resources\Reportings;
+namespace App\Filament\Resources\InOuts;
 
-use App\Filament\Resources\Reportings\Pages\CreateReporting;
-use App\Filament\Resources\Reportings\Pages\CreateReportingBulk;
-use App\Filament\Resources\Reportings\Pages\EditReporting;
-use App\Filament\Resources\Reportings\Pages\ListReportings;
-use App\Filament\Resources\Reportings\Pages\ReportingReport;
-use App\Filament\Resources\Reportings\Schemas\ReportingForm;
-use App\Filament\Resources\Reportings\Tables\ReportingsTable;
+use App\Filament\Resources\InOuts\Pages\CreateInOut;
+use App\Filament\Resources\InOuts\Pages\CreateInOutBulk;
+use App\Filament\Resources\InOuts\Pages\EditInOut;
+use App\Filament\Resources\InOuts\Pages\ListInOuts;
+use App\Filament\Resources\InOuts\Schemas\InOutForm;
+use App\Filament\Resources\InOuts\Tables\InOutsTable;
 use App\Models\Consultant;
-use App\Models\Reporting;
+use App\Models\InOut;
 use App\Models\User;
 use BackedEnum;
 use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class ReportingResource extends Resource
+class InOutResource extends Resource
 {
-    protected static ?string $model = Reporting::class;
+    protected static ?string $model = InOut::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $recordTitleAttribute = 'date';
+
+    protected static ?string $navigationLabel = 'In & Out';
+
+    protected static string|BackedEnum|null $navigationIcon = 'fas-right-left';
+
     protected static string | UnitEnum | null $navigationGroup = 'Consultant Management';
 
-    protected static ?string $recordTitleAttribute = 'Reporting';
+    protected static ?int $navigationSort = 7;
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -36,7 +39,7 @@ class ReportingResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return ReportingForm::configure($schema);
+        return InOutForm::configure($schema);
     }
 
     public static function getEloquentQuery(): Builder
@@ -59,7 +62,7 @@ class ReportingResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return ReportingsTable::configure($table);
+        return InOutsTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -87,21 +90,13 @@ class ReportingResource extends Resource
         return $query->whereIn('id', $consultantIds);
     }
 
-    public static function getAccessibleConsultantOptions(): array
-    {
-        return static::getAccessibleConsultantsQuery()
-            ->pluck('name', 'id')
-            ->all();
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => ListReportings::route('/'),
-            'report' => ReportingReport::route('/report'),
-            'create' => CreateReporting::route('/create'),
-            'bulk-create' => CreateReportingBulk::route('/bulk-create'),
-            'edit' => EditReporting::route('/{record}/edit'),
+            'index' => ListInOuts::route('/'),
+            'create' => CreateInOut::route('/create'),
+            'bulk-create' => CreateInOutBulk::route('/bulk-create'),
+            'edit' => EditInOut::route('/{record}/edit'),
         ];
     }
 }
