@@ -15,15 +15,27 @@ class ReportingsTable
         return $table
             ->columns([
                 TextColumn::make('date')
-                    ->date(),
-                TextColumn::make('consultant.name'),
-                TextColumn::make('department.name'),
-                TextColumn::make('new'),
-                TextColumn::make('report'),
-                TextColumn::make('follow_up'),
-                TextColumn::make('back'),
-                TextColumn::make('total'),
-                TextColumn::make('remark.name'),
+                    ->date()
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('consultant.name')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('department.name')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('new')
+                    ->searchable(),
+                TextColumn::make('report')
+                    ->searchable(),
+                TextColumn::make('follow_up')
+                    ->searchable(),
+                TextColumn::make('back')
+                    ->searchable(),
+                TextColumn::make('total')
+                    ->searchable(),
+                TextColumn::make('remark.name')
+                    ->searchable(),
             ])
             ->filters([
                 //

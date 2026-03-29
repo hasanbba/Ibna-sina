@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Remarks\Schemas;
 
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class RemarkForm
@@ -11,9 +12,18 @@ class RemarkForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Name')
-                    ->required(),
+                Section::make('Remark Details')
+                    ->description('Create or update the remark options used in reporting records.')
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Remark Name')
+                            ->placeholder('Enter remark name')
+                            ->maxLength(255)
+                            ->required()
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 }

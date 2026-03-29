@@ -10,7 +10,13 @@ class consultant extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasRoles;
-    protected $fillable = ['department_id', 'name', 'status'];
+    protected $fillable = [
+        'department_id',
+        'name',
+        'designation',
+        'chamber_time',
+        'status',
+    ];
 
     public function department()
     {

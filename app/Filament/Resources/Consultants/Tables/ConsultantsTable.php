@@ -17,8 +17,17 @@ class ConsultantsTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Consultant Name')
                     ->searchable(),
+                TextColumn::make('designation')
+                    ->label('Designation')
+                    ->searchable()
+                    ->placeholder('-'),
                 TextColumn::make('department.name')->label('Department'),
+                TextColumn::make('chamber_time')
+                    ->label('Chamber Time')
+                    ->searchable()
+                    ->placeholder('-'),
                 TextColumn::make('status')
                 ->colors([
                     'success' => 'active',

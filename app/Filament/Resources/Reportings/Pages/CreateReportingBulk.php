@@ -15,6 +15,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Pages\Dashboard;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -51,6 +52,7 @@ class CreateReportingBulk extends CreateRecord
             ->statePath('data')
             ->components([
                 Section::make('Bulk Reporting')
+                    ->heading(auth()->user()?->isSuperAdmin() ? 'Bulk Reporting' : 'Reporting')
                     ->columns(1)
                     ->columnSpanFull()
                     ->schema([
@@ -201,14 +203,14 @@ class CreateReportingBulk extends CreateRecord
 
         $notification->send();
 
-        $this->redirect($this->getResourceUrl());
+        $this->redirect($this->getRedirectUrl());
     }
 
     protected function getFormActions(): array
     {
         return [
             Action::make('create')
-                ->label('Save Bulk Reporting')
+                ->label(auth()->user()?->isSuperAdmin() ? 'Save Bulk Reporting' : 'Submit Now')
                 ->submit('create')
                 ->keyBindings(['mod+s']),
             $this->getCancelFormAction(),
@@ -343,5 +345,14 @@ class CreateReportingBulk extends CreateRecord
             + (int) ($row['report'] ?? 0)
             + (int) ($row['follow_up'] ?? 0)
             + (int) ($row['back'] ?? 0);
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        if (! (auth()->user()?->isSuperAdmin() ?? false)) {
+            return Dashboard::getUrl(panel: 'sysadmin');
+        }
+
+        return static::getResource()::getUrl();
     }
 }

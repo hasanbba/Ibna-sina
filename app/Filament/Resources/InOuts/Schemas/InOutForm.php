@@ -55,12 +55,14 @@ class InOutForm
                             ->label('In')
                             ->seconds(false)
                             ->native(false)
+                            ->displayFormat('h:i A')
                             ->format('h:i A')
                             ->required(),
                         TimePicker::make('out_time')
                             ->label('Out')
                             ->seconds(false)
                             ->native(false)
+                            ->displayFormat('h:i A')
                             ->format('h:i A')
                             ->nullable(),
                     ]),
